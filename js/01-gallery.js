@@ -13,7 +13,7 @@ galleryRef.addEventListener('click', onClickOpenModal);
 function createImageBlock(img) {
     return img.map(({ preview, original, description }) => 
     `<div class="gallery__item">
-        <a class="gallery__link" href="large-image.jpg">
+        <a class="gallery__link" href="${original}">
             <img
                 class="gallery__image"
                 src="${preview}"
