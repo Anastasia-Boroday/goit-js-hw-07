@@ -2,13 +2,12 @@ import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
 
-
 const galleryRef = document.querySelector('.gallery');
 const imgsBlock = createImageBlock(galleryItems);
 
+
 galleryRef.insertAdjacentHTML('beforeend', imgsBlock);
 galleryRef.addEventListener('click', onClickOpenModal);
-
 
 function createImageBlock(img) {
     return img.map(({ preview, original, description }) => 
@@ -25,30 +24,32 @@ function createImageBlock(img) {
 `
     ).join('');
 };
+// -----------------------------------------------------------------------------
 
-function onClickOpenModal(evt) {
+function onClickOpenModal(evt) {     
     evt.preventDefault();
 
-    window.addEventListener('keydown', onCloseModal);
-
-     if (evt.target.tagName!=='IMG') {
-        return 
-    }
-
-    const instance = basicLightbox.create(`
+    if (evt.target.nodeName === 'IMG') {
+      const instance = basicLightbox.create(`
     <div class="modal">
         <img src="${evt.target.dataset.source}"  alt="${evt.target.alt}" width="800" height="600">
     </div>  
-`)
-    instance.show()
-    function onCloseModal(evt) {
-    
-         if (evt.code ==='Escape') {
-             instance.close(() => console.log('lightbox not visible anymore'));
-             window.removeEventListener('keydown', onCloseModal);
-         }        
-}
+    `,
+          {
+          onShow: () => document.addEventListener('keydown', onEscPress),
+          onClose: () => { document.removeEventListener('keydown', onEscPress) }
+        }
+    );
+        
+      instance.show(() => console.log('open'));
+      
 
+        function onEscPress(evt) {
+          if (evt.code === 'Escape') {
+            instance.close(() => console.log('lightbox not visible anymore'));
+          } 
+        }
+    }
 }
 
 
